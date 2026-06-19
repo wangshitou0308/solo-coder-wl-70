@@ -11,6 +11,10 @@ import PlantingDetail from "@/pages/PlantingDetail";
 import PlantingNew from "@/pages/PlantingNew";
 import Statistics from "@/pages/Statistics";
 import Profile from "@/pages/Profile";
+import ConservationTasks from "@/pages/ConservationTasks";
+import EndangeredZone from "@/pages/EndangeredZone";
+import ConservationTaskNew from "@/pages/ConservationTaskNew";
+import ConservationTaskDetail from "@/pages/ConservationTaskDetail";
 
 export default function App() {
   return (
@@ -28,6 +32,10 @@ export default function App() {
           <Route path="/planting/new" element={<PlantingNew />} />
           <Route path="/statistics" element={<Statistics />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/endangered" element={<EndangeredZone />} />
+          <Route path="/tasks" element={<ConservationTasks />} />
+          <Route path="/tasks/new" element={<ConservationTaskNew />} />
+          <Route path="/tasks/:id" element={<ConservationTaskDetail />} />
         </Route>
       </Routes>
     </Router>

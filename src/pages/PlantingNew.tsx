@@ -302,6 +302,10 @@ export default function PlantingNew() {
             保存记录
           </button>
         </div>
+
+        <p className="text-center text-sm text-forest-500 italic">
+          提示：记录创建后，可在详情页添加各阶段的详细生长日志，形成完整的种植档案。
+        </p>
       </form>
     </div>
   );

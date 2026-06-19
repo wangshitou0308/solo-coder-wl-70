@@ -7,13 +7,17 @@ import {
   BarChart3,
   User,
   ChevronRight,
+  Target,
+  ShieldAlert,
 } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 
 const navItems = [
   { path: '/', icon: LayoutDashboard, label: '数据看板' },
   { path: '/seeds', icon: Sprout, label: '种子库' },
+  { path: '/endangered', icon: ShieldAlert, label: '濒危品种专区' },
   { path: '/exchange', icon: Repeat, label: '交换大厅' },
+  { path: '/tasks', icon: Target, label: '复壮任务' },
   { path: '/planting', icon: Leaf, label: '种植记录' },
   { path: '/statistics', icon: BarChart3, label: '统计分析' },
 ];

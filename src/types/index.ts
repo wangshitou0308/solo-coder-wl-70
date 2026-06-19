@@ -12,6 +12,20 @@ export type PlantingMethod = 'direct' | 'seedling' | 'transplant' | 'pot';
 
 export type UserRole = 'admin' | 'grower';
 
+export type EndangeredReason = 'old_update' | 'low_stock' | 'low_germination' | 'manual';
+
+export type TaskStatus = 'published' | 'claimed' | 'in_progress' | 'submitted' | 'completed' | 'cancelled';
+
+export type GrowthStageType = 
+  | 'sowing' 
+  | 'germination' 
+  | 'transplant' 
+  | 'flowering' 
+  | 'fruiting' 
+  | 'pest_disease' 
+  | 'harvest' 
+  | 'seed_saving';
+
 export interface User {
   id: string;
   name: string;
@@ -113,6 +127,8 @@ export interface PlantingRecord {
   review: string;
   photos: string[];
   createdAt: string;
+  growthLogs: GrowthLog[];
+  isExcellent?: boolean;
 }
 
 export const speciesLabels: Record<Species, string> = {
@@ -160,3 +176,117 @@ export const plantingMethodLabels: Record<PlantingMethod, string> = {
   transplant: '移栽',
   pot: '盆栽',
 };
+
+export interface ConservationTask {
+  id: string;
+  seedId: string;
+  seedName: string;
+  seedCode: string;
+  publisherId: string;
+  publisherName: string;
+  title: string;
+  description: string;
+  requirements: string;
+  targetQuantity: number;
+  deadline: string;
+  status: TaskStatus;
+  claimedBy?: string;
+  claimedByName?: string;
+  claimedAt?: string;
+  plantingRecordId?: string;
+  submittedAt?: string;
+  completedAt?: string;
+  seedReturned?: number;
+  feedback?: string;
+  createdAt: string;
+}
+
+export interface GrowthLogPhoto {
+  id: string;
+  url: string;
+  caption?: string;
+}
+
+export interface GrowthLog {
+  id: string;
+  plantingRecordId: string;
+  stage: GrowthStageType;
+  title: string;
+  description: string;
+  date: string;
+  photos: GrowthLogPhoto[];
+  temperature?: number;
+  humidity?: number;
+  weather?: string;
+  createdAt: string;
+}
+
+export interface ExtendedPlantingRecord extends PlantingRecord {
+  growthLogs: GrowthLog[];
+  isExcellent?: boolean;
+}
+
+export interface SeedEndangeredInfo {
+  seedId: string;
+  reasons: EndangeredReason[];
+  lastUpdateYears: number;
+  stockLevel: 'low' | 'medium' | 'high';
+  germinationLevel: 'low' | 'medium' | 'high';
+}
+
+export const endangeredReasonLabels: Record<EndangeredReason, string> = {
+  old_update: '三年以上未更新',
+  low_stock: '库存过低',
+  low_germination: '发芽率低',
+  manual: '人工标记',
+};
+
+export const taskStatusLabels: Record<TaskStatus, string> = {
+  published: '待领取',
+  claimed: '已领取',
+  in_progress: '进行中',
+  submitted: '已提交结果',
+  completed: '已完成',
+  cancelled: '已取消',
+};
+
+export const taskStatusColors: Record<TaskStatus, string> = {
+  published: 'bg-blue-100 text-blue-700',
+  claimed: 'bg-amber-100 text-amber-700',
+  in_progress: 'bg-green-100 text-green-700',
+  submitted: 'bg-purple-100 text-purple-700',
+  completed: 'bg-forest-100 text-forest-700',
+  cancelled: 'bg-gray-100 text-gray-500',
+};
+
+export const growthStageLabels: Record<GrowthStageType, string> = {
+  sowing: '播种',
+  germination: '发芽',
+  transplant: '移栽',
+  flowering: '开花',
+  fruiting: '结果',
+  pest_disease: '病虫害',
+  harvest: '收获',
+  seed_saving: '留种',
+};
+
+export const growthStageColors: Record<GrowthStageType, string> = {
+  sowing: 'bg-amber-500',
+  germination: 'bg-green-500',
+  transplant: 'bg-teal-500',
+  flowering: 'bg-pink-500',
+  fruiting: 'bg-orange-500',
+  pest_disease: 'bg-red-500',
+  harvest: 'bg-amber-600',
+  seed_saving: 'bg-forest-600',
+};
+
+export const growthStageOrder: GrowthStageType[] = [
+  'sowing',
+  'germination',
+  'transplant',
+  'flowering',
+  'fruiting',
+  'harvest',
+  'seed_saving',
+];

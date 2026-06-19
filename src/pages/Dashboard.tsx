@@ -11,7 +11,11 @@ import {
   AlertTriangle,
   TrendingUp,
   Calendar,
+  Target,
+  Activity,
+  CheckCircle,
 } from 'lucide-react';
+import { taskStatusLabels, taskStatusColors } from '../types';
 import { useAppStore } from '../store/useAppStore';
 
 const COLORS = ['#52804e', '#c9a227', '#719d6d', '#e18a00', '#9bbd98', '#ba6103', '#ccb98e'];
@@ -67,7 +71,7 @@ function StatCard({
 }
 
 export default function Dashboard() {
-  const { getStats, seeds, exchanges, plantingRecords } = useAppStore();
+  const { getStats, seeds, exchanges, plantingRecords, conservationTasks } = useAppStore();
   const navigate = useNavigate();
   const stats = getStats();
   const now = new Date();
@@ -120,6 +124,30 @@ export default function Dashboard() {
           subtitle="三年以上未更新"
           color="bg-white/20"
           bgColor="bg-gradient-to-br from-amber-600 to-amber-800"
+        />
+        <StatCard
+          icon={Target}
+          title="待复壮品种"
+          value={stats.pendingRejuvenationSeeds}
+          subtitle="急需保育行动"
+          color="bg-white/20"
+          bgColor="bg-gradient-to-br from-red-500 to-red-700"
+        />
+        <StatCard
+          icon={Activity}
+          title="进行中任务"
+          value={stats.activeTasks}
+          subtitle="正在执行保育任务"
+          color="bg-white/20"
+          bgColor="bg-gradient-to-br from-forest-500 to-forest-700"
+        />
+        <StatCard
+          icon={CheckCircle}
+          title="完成任务数"
+          value={stats.completedTasks}
+          subtitle="成功完成保育任务"
+          color="bg-white/20"
+          bgColor="bg-gradient-to-br from-amber-500 to-amber-700"
         />
       </div>
 
@@ -242,6 +270,40 @@ export default function Dashboard() {
                 <p className="text-sm font-bold text-amber-600">{user.count} 份</p>
               </div>
             ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="bg-white rounded-2xl p-6 shadow-card lg:col-span-3 cursor-pointer hover:shadow-hover transition-all duration-300" onClick={() => navigate('/tasks')}>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-serif font-bold text-forest-800">保育任务动态</h3>
+            <Activity className="w-5 h-5 text-forest-400" />
+          </div>
+          <div className="space-y-3">
+            {[...conservationTasks]
+              .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+              .slice(0, 5)
+              .map((task) => (
+                <div 
+                  key={task.id}
+                  className="flex items-center gap-4 p-3 rounded-xl hover:bg-cream-50 transition-colors"
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-forest-800 truncate">{task.title}</p>
+                    <p className="text-xs text-forest-500 mt-1">{task.seedName}</p>
+                  </div>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${taskStatusColors[task.status]}`}
+                  >
+                    {taskStatusLabels[task.status]}
+                  </span>
+                  <div className="text-right">
+                    <p className="text-xs text-forest-400">截止日期</p>
+                    <p className="text-sm font-medium text-forest-600">{task.deadline}</p>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </div>
