@@ -10,6 +10,7 @@ import PlantingList from "@/pages/PlantingList";
 import PlantingDetail from "@/pages/PlantingDetail";
 import PlantingNew from "@/pages/PlantingNew";
 import Statistics from "@/pages/Statistics";
+import Profile from "@/pages/Profile";
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/planting/:id" element={<PlantingDetail />} />
           <Route path="/planting/new" element={<PlantingNew />} />
           <Route path="/statistics" element={<Statistics />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
     </Router>

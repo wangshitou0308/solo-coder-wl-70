@@ -46,8 +46,12 @@ export default function MyExchange() {
   const myExchanges = exchanges.filter(e => e.sharerId === currentUser.id);
   const myRequests = getRequestsByRequester(currentUser.id);
 
+  const selectedSeed = seeds.find(s => s.id === publishForm.seedId);
+  const maxQuantity = selectedSeed?.quantity || 0;
+  const isQuantityValid = publishForm.quantity > 0 && publishForm.quantity <= maxQuantity;
+
   const handlePublish = () => {
-    if (!publishForm.seedId || !publishForm.description.trim()) return;
+    if (!publishForm.seedId || !publishForm.description.trim() || !isQuantityValid) return;
     
     addExchange({
       seedId: publishForm.seedId,
@@ -323,14 +327,27 @@ export default function MyExchange() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-forest-700 mb-2">分享数量(克) *</label>
+                <label className="block text-sm font-medium text-forest-700 mb-2">
+                  分享数量(克) *
+                  {selectedSeed && (
+                    <span className="text-forest-400 font-normal ml-2">
+                      (库存: {maxQuantity}g)
+                    </span>
+                  )}
+                </label>
                 <input
                   type="number"
                   min="1"
+                  max={maxQuantity || undefined}
                   value={publishForm.quantity}
-                  onChange={(e) => setPublishForm({ ...publishForm, quantity: parseInt(e.target.value) })}
-                  className="w-full px-4 py-3 border border-cream-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-forest-500/30 focus:border-forest-500"
+                  onChange={(e) => setPublishForm({ ...publishForm, quantity: Math.min(parseInt(e.target.value) || 0, maxQuantity) })}
+                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-forest-500/30 focus:border-forest-500 transition-colors ${
+                    selectedSeed && !isQuantityValid ? 'border-red-400 bg-red-50' : 'border-cream-300'
+                  }`}
                 />
+                {selectedSeed && !isQuantityValid && (
+                  <p className="text-xs text-red-500 mt-1">分享数量不能超过库存数量 {maxQuantity}g</p>
+                )}
               </div>
               
               <div>
@@ -366,7 +383,7 @@ export default function MyExchange() {
               </button>
               <button
                 onClick={handlePublish}
-                disabled={!publishForm.seedId || !publishForm.description.trim()}
+                disabled={!publishForm.seedId || !publishForm.description.trim() || !isQuantityValid}
                 className="flex-1 py-2.5 bg-forest-600 hover:bg-forest-700 disabled:bg-forest-300 text-white rounded-xl transition-colors font-medium"
               >
                 发布

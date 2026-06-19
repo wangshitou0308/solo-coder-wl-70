@@ -61,6 +61,9 @@ export default function SeedNew() {
   };
 
   const handleAddPhoto = () => {
+    if (photos.length >= 8) {
+      return;
+    }
     const samplePhotos = [
       { url: 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=400&h=300&fit=crop', type: 'plant' as const, description: '植株照片' },
       { url: 'https://images.unsplash.com/photo-1592924357228-91a9daadcfea?w=400&h=300&fit=crop', type: 'fruit' as const, description: '果实照片' },
@@ -215,16 +218,18 @@ export default function SeedNew() {
                 </button>
               </div>
             ))}
-            <button
-              type="button"
-              onClick={handleAddPhoto}
-              className="aspect-square rounded-xl border-2 border-dashed border-cream-300 flex flex-col items-center justify-center text-forest-400 hover:border-forest-400 hover:text-forest-600 transition-colors"
-            >
-              <Upload className="w-6 h-6 mb-1" />
-              <span className="text-xs">添加照片</span>
-            </button>
+            {photos.length < 8 && (
+              <button
+                type="button"
+                onClick={handleAddPhoto}
+                className="aspect-square rounded-xl border-2 border-dashed border-cream-300 flex flex-col items-center justify-center text-forest-400 hover:border-forest-400 hover:text-forest-600 transition-colors"
+              >
+                <Upload className="w-6 h-6 mb-1" />
+                <span className="text-xs">添加照片</span>
+              </button>
+            )}
           </div>
-          <p className="text-xs text-forest-400">支持种子、植株、果实照片，最多上传8张</p>
+          <p className="text-xs text-forest-400">支持种子、植株、果实照片，最多上传8张（{photos.length}/8）</p>
         </div>
 
         <div className="bg-white rounded-2xl p-6 shadow-card">

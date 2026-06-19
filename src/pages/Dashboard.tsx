@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   PieChart, Pie, Cell, ResponsiveContainer, 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend 
@@ -67,6 +68,7 @@ function StatCard({
 
 export default function Dashboard() {
   const { getStats, seeds, exchanges, plantingRecords } = useAppStore();
+  const navigate = useNavigate();
   const stats = getStats();
   const now = new Date();
   const thisMonth = now.getMonth();
@@ -192,6 +194,7 @@ export default function Dashboard() {
             {recentSeeds.map((seed) => (
               <div 
                 key={seed.id}
+                onClick={() => navigate(`/seeds/${seed.id}`)}
                 className="flex items-center gap-4 p-3 rounded-xl hover:bg-cream-50 transition-colors cursor-pointer"
               >
                 <div className="w-12 h-12 rounded-lg overflow-hidden bg-cream-100 flex-shrink-0">
